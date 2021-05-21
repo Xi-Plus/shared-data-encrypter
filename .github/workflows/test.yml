@@ -9,5 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install dependency
+        run: sudo apt-get install libcrypto++-dev libcrypto++-doc libcrypto++-utils
+
       - name: Run tests
         run: make test
