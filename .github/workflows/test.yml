@@ -17,6 +17,6 @@ jobs:
       - name: Run tests
         run: make test
 
-      - name: Run googoe tests
+      - name: Run google tests
         run: bazel test --test_output=all //:hello_test
         working-directory: ./tests
