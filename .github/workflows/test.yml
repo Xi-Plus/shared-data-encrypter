@@ -1,0 +1,22 @@
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependency
+        run: |
+          sudo apt-get install libcrypto++-dev libcrypto++-doc libcrypto++-utils
+          sudo npm install -g @bazel/bazelisk
+
+      - name: Build
+        run: make build
+
+      - name: Run tests
+        run: make test
+        working-directory: ./tests

@@ -1,0 +1,7 @@
+all: run_test_basic
+
+test_basic: test_basic.cpp
+	g++ -std=c++14 -o test_basic ../sde.o test_basic.cpp -I ../ -l:libcryptopp.a
+
+run_test_basic: test_basic
+	./test_basic

@@ -1,5 +1,7 @@
 {
 	"C_Cpp.default.includePath": [
-		"C:/libs"
+		"${workspaceRoot}",
+		"C:/libs",
+		"C:/libs/googletest/googletest/include"
 	]
 }
