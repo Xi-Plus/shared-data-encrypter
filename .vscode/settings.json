@@ -1,0 +1,6 @@
+{
+	"C_Cpp.default.includePath": [
+		"C:/libs",
+		"C:/libs/googletest/googletest/include"
+	]
+}
