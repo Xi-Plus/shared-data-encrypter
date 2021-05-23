@@ -1,8 +1,13 @@
 #include "sde.hpp"
 
 int main() {
-	SDE::User user1 = SDE::User();
-	SDE::User user2 = SDE::User();
-	SDE::Data data1 = SDE::Data("secret for user1");
-	SDE::Data data2 = SDE::Data("secret for user2");
+	SDE::Data apple = SDE::Data("secret for apple");
+	SDE::Data banana = SDE::Data("secret for banana");
+	SDE::DataAccess alice_apple = SDE::DataAccess();
+	SDE::DataAccess alice_banana = SDE::DataAccess();
+	SDE::DataAccess bob_banana = SDE::DataAccess();
+
+	apple.giveAccessTo(alice_apple);
+	banana.giveAccessTo(alice_banana);
+	banana.giveAccessTo(bob_banana);
 }

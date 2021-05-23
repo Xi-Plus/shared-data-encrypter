@@ -4,20 +4,34 @@
 
 namespace SDE {
 
-class User {
+class DataAccess {
    public:
-	User();
+	DataAccess();
+
+	void encryptDataKey();
+	void decryptDataKey(std::string password);
+	void changePassword(std::string oldPassword, std::string newPassword);
+	std::string getEncryptedDataKey();
 
    private:
+	std::string dataKey;
+	std::string encryptedDataKey;
 };
 
 class Data {
    public:
 	Data(std::string _data);
-	Data(CryptoPP::RSA::PrivateKey _privateKey, std::string _encryptedData);
+	Data(CryptoPP::RSA::PublicKey _publicKey, std::string _encryptedData);
+
+	void encrytptData();
+	void decryptData(DataAccess access);
+	void giveAccessTo(DataAccess access);
 
    private:
-	CryptoPP::RSA::PrivateKey privateKey;
+	bool locked;
+	CryptoPP::RSA::PublicKey publicKey;
+	std::string data;
+	std::string encryptedData;
 };
 
 }  // namespace SDE
