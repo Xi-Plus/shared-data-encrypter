@@ -7,26 +7,16 @@
 #include <sstream>
 #include <string>
 
-std::string Encode(CryptoPP::ByteQueue& queue) {
+template <typename Key>
+std::string EncodeKey(const Key& key) {
+	CryptoPP::ByteQueue queue;
+	key.Save(queue);
+
 	std::stringstream ss;
 	CryptoPP::HexEncoder encoder(new CryptoPP::FileSink(ss));
 	queue.TransferTo(encoder);
 	encoder.MessageEnd();
 	return ss.str();
-}
-
-std::string EncodePrivateKey(CryptoPP::RSA::PrivateKey& key) {
-	CryptoPP::ByteQueue queue;
-	key.DEREncodePrivateKey(queue);
-
-	return Encode(queue);
-}
-
-std::string EncodePublicKey(CryptoPP::RSA::PublicKey& key) {
-	CryptoPP::ByteQueue queue;
-	key.DEREncodePublicKey(queue);
-
-	return Encode(queue);
 }
 
 int main() {
@@ -36,8 +26,10 @@ int main() {
 	CryptoPP::RSA::PrivateKey privateKey(params);
 	CryptoPP::RSA::PublicKey publicKey(params);
 
-	std::cout << "private: " << EncodePrivateKey(privateKey) << std::endl;
-	std::cout << "public: " << EncodePublicKey(publicKey) << std::endl;
+	std::cout << "private: " << std::endl;
+	std::cout << EncodeKey(privateKey) << std::endl;
+	std::cout << "public: " << std::endl;
+	std::cout << EncodeKey(publicKey) << std::endl;
 	// CryptoPP::ByteQueue queue;
 	// publicKey.Save(queue);
 
