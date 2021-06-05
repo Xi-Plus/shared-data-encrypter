@@ -25,6 +25,10 @@ jobs:
         run: make run_test_passwordencrypter
         working-directory: ./tests
 
+      - name: Test DataAccess
+        run: make run_test_dataaccess
+        working-directory: ./tests
+
       - name: Basic tests
         run: make run_test_basic
         working-directory: ./tests

@@ -47,19 +47,19 @@ class PasswordEncrypter {
 class DataAccess {
    public:
 	DataAccess(std::string password);
-	DataAccess(std::string _encodedPublicKey, std::string _encryptedPrivateKey, std::string _encryptedDataKey);
+	DataAccess(std::string _encodedUserPublicKey, std::string _encryptedUserPrivateKey, std::string _encryptedDataKey);
 
 	void encryptDataKey();
 	void decryptDataKey(std::string password);
 	void changePassword(std::string oldPassword, std::string newPassword);
-	std::string getPublicKey();
-	std::string getEncryptedPrivateKey();
+	std::string getUserPublicKey();
+	std::string getEncryptedUserPrivateKey();
 	std::string getEncryptedDataKey();
 
    private:
 	bool locked;
-	Encrypter dataKeyEncrypter;
-	std::string encryptedPrivateKey;
+	Encrypter userEncrypter;
+	std::string encryptedUserPrivateKey;
 	std::string dataKey;
 	std::string encryptedDataKey;
 };
