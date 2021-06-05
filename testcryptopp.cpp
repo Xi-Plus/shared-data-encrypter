@@ -68,11 +68,13 @@ int main() {
 
 	std::string decrypted;
 
+	CryptoPP::AutoSeededRandomPool rng2;
+
 	CryptoPP::RSAES_OAEP_SHA_Decryptor d(privateKey2);
 	CryptoPP::StringSource(
 		encrypted, true,
 		new CryptoPP::PK_DecryptorFilter(
-			rng, d,
+			rng2, d,
 			new CryptoPP::StringSink(decrypted)));
 
 	std::cout << "decrypted: " << decrypted << std::endl;
