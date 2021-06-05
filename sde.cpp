@@ -18,14 +18,14 @@ CryptoPP::RSA::PublicKey SDE::Encrypter::getPublicKey() {
 }
 
 std::string SDE::Encrypter::getEncodedPublicKey() {
-	return EncodeKey<CryptoPP::RSA::PublicKey>(getPublicKey());
+	return encodeKey<CryptoPP::RSA::PublicKey>(getPublicKey());
 }
 
 CryptoPP::RSA::PrivateKey SDE::Encrypter::getPrivateKey() {
 	return *(this->privateKey);
 }
 std::string SDE::Encrypter::getEncodedPrivateKey() {
-	return EncodeKey<CryptoPP::RSA::PrivateKey>(getPrivateKey());
+	return encodeKey<CryptoPP::RSA::PrivateKey>(getPrivateKey());
 }
 
 void SDE::Encrypter::setEncodedPublicKey(std::string encodedKey) {
@@ -68,6 +68,33 @@ std::string SDE::Encrypter::decryptString(std::string encrypted) {
 	}
 
 	return decrypted;
+}
+
+template <typename Key>
+std::string SDE::Encrypter::encodeKey(const Key& key) {
+	CryptoPP::ByteQueue queue;
+	key.Save(queue);
+
+	std::stringstream ss;
+	CryptoPP::HexEncoder encoder(new CryptoPP::FileSink(ss));
+	queue.TransferTo(encoder);
+	encoder.MessageEnd();
+	return ss.str();
+}
+
+template <typename Key>
+const Key SDE::Encrypter::decodeKey(std::string& encodedKey) {
+	CryptoPP::HexDecoder decoder;
+	decoder.Put((byte*)encodedKey.data(), encodedKey.size());
+	decoder.MessageEnd();
+
+	CryptoPP::ByteQueue queue;
+	decoder.TransferTo(queue);
+	queue.MessageEnd();
+
+	Key key;
+	key.Load(queue);
+	return key;
 }
 
 SDE::DataAccess::DataAccess(std::string password) {}

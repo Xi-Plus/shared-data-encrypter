@@ -23,31 +23,10 @@ class Encrypter {
 
    private:
 	template <typename Key>
-	std::string EncodeKey(const Key& key) {
-		CryptoPP::ByteQueue queue;
-		key.Save(queue);
-
-		std::stringstream ss;
-		CryptoPP::HexEncoder encoder(new CryptoPP::FileSink(ss));
-		queue.TransferTo(encoder);
-		encoder.MessageEnd();
-		return ss.str();
-	}
+	std::string encodeKey(const Key& key);
 
 	template <typename Key>
-	const Key decodeKey(std::string& encodedKey) {
-		CryptoPP::HexDecoder decoder;
-		decoder.Put((byte*)encodedKey.data(), encodedKey.size());
-		decoder.MessageEnd();
-
-		CryptoPP::ByteQueue queue;
-		decoder.TransferTo(queue);
-		queue.MessageEnd();
-
-		Key key;
-		key.Load(queue);
-		return key;
-	}
+	const Key decodeKey(std::string& encodedKey);
 
 	CryptoPP::AutoSeededRandomPool* rng = new CryptoPP::AutoSeededRandomPool();
 	CryptoPP::RSA::PrivateKey* privateKey = nullptr;
