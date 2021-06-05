@@ -12,8 +12,8 @@
 
 #include <exception>
 
-/* Encrypter */
-SDE::Encrypter::Encrypter() {
+/* RSAEncrypter */
+SDE::RSAEncrypter::RSAEncrypter() {
 	CryptoPP::InvertibleRSAFunction params;
 	params.GenerateRandomWithKeySize(*rng, 2048);
 
@@ -21,30 +21,30 @@ SDE::Encrypter::Encrypter() {
 	publicKey = new CryptoPP::RSA::PublicKey(params);
 };
 
-CryptoPP::RSA::PublicKey SDE::Encrypter::getPublicKey() {
+CryptoPP::RSA::PublicKey SDE::RSAEncrypter::getPublicKey() {
 	return *(this->publicKey);
 }
 
-std::string SDE::Encrypter::getEncodedPublicKey() {
+std::string SDE::RSAEncrypter::getEncodedPublicKey() {
 	return encodeKey<CryptoPP::RSA::PublicKey>(getPublicKey());
 }
 
-CryptoPP::RSA::PrivateKey SDE::Encrypter::getPrivateKey() {
+CryptoPP::RSA::PrivateKey SDE::RSAEncrypter::getPrivateKey() {
 	return *(this->privateKey);
 }
-std::string SDE::Encrypter::getEncodedPrivateKey() {
+std::string SDE::RSAEncrypter::getEncodedPrivateKey() {
 	return encodeKey<CryptoPP::RSA::PrivateKey>(getPrivateKey());
 }
 
-void SDE::Encrypter::setEncodedPublicKey(std::string encodedKey) {
+void SDE::RSAEncrypter::setEncodedPublicKey(std::string encodedKey) {
 	*(this->publicKey) = decodeKey<CryptoPP::RSA::PublicKey>(encodedKey);
 }
 
-void SDE::Encrypter::setEncodedPrivateKey(std::string encodedKey) {
+void SDE::RSAEncrypter::setEncodedPrivateKey(std::string encodedKey) {
 	*(this->privateKey) = decodeKey<CryptoPP::RSA::PrivateKey>(encodedKey);
 }
 
-std::string SDE::Encrypter::encryptString(std::string plainText) {
+std::string SDE::RSAEncrypter::encryptString(std::string plainText) {
 	std::string encrypted;
 
 	CryptoPP::RSAES_OAEP_SHA_Encryptor e(*publicKey);
@@ -58,7 +58,7 @@ std::string SDE::Encrypter::encryptString(std::string plainText) {
 	return encrypted;
 }
 
-std::string SDE::Encrypter::decryptString(std::string encrypted) {
+std::string SDE::RSAEncrypter::decryptString(std::string encrypted) {
 	std::string decrypted;
 
 	CryptoPP::RSAES_OAEP_SHA_Decryptor d(*privateKey);
@@ -79,7 +79,7 @@ std::string SDE::Encrypter::decryptString(std::string encrypted) {
 }
 
 template <typename Key>
-std::string SDE::Encrypter::encodeKey(const Key& key) {
+std::string SDE::RSAEncrypter::encodeKey(const Key& key) {
 	CryptoPP::ByteQueue queue;
 	key.Save(queue);
 
@@ -91,7 +91,7 @@ std::string SDE::Encrypter::encodeKey(const Key& key) {
 }
 
 template <typename Key>
-const Key SDE::Encrypter::decodeKey(std::string& encodedKey) {
+const Key SDE::RSAEncrypter::decodeKey(std::string& encodedKey) {
 	CryptoPP::HexDecoder decoder;
 	decoder.Put((byte*)encodedKey.data(), encodedKey.size());
 	decoder.MessageEnd();
@@ -152,7 +152,7 @@ SDE::DataAccess::DataAccess(std::string password) {
 	SDE::PasswordEncrypter userPrivateKeyEncrypter = SDE::PasswordEncrypter(password);
 
 	locked = false;
-	userEncrypter = SDE::Encrypter();
+	userEncrypter = SDE::RSAEncrypter();
 	encryptedUserPrivateKey = userPrivateKeyEncrypter.encryptString(userEncrypter.getEncodedPrivateKey());
 	dataKey = "";
 	encryptedDataKey = "";
@@ -160,7 +160,7 @@ SDE::DataAccess::DataAccess(std::string password) {
 
 SDE::DataAccess::DataAccess(std::string _encodedUserPublicKey, std::string _encryptedUserPrivateKey, std::string _encryptedDataKey) {
 	locked = true;
-	userEncrypter = SDE::Encrypter();
+	userEncrypter = SDE::RSAEncrypter();
 	userEncrypter.setEncodedPublicKey(_encodedUserPublicKey);
 	encryptedUserPrivateKey = _encryptedUserPrivateKey;
 	dataKey = "";
@@ -168,9 +168,12 @@ SDE::DataAccess::DataAccess(std::string _encodedUserPublicKey, std::string _encr
 }
 
 void SDE::DataAccess::encryptDataKey() {
+	std::cout << "C\n";
 	encryptedDataKey = userEncrypter.encryptString(dataKey);
+	std::cout << "D\n";
 	dataKey = "";
 	locked = true;
+	std::cout << "D\n";
 }
 
 void SDE::DataAccess::decryptDataKey(std::string password) {

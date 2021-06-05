@@ -8,9 +8,9 @@
 
 namespace SDE {
 
-class Encrypter {
+class RSAEncrypter {
    public:
-	Encrypter();
+	RSAEncrypter();
 
 	CryptoPP::RSA::PublicKey getPublicKey();
 	CryptoPP::RSA::PrivateKey getPrivateKey();
@@ -61,7 +61,7 @@ class DataAccess {
 	void setDataKey(std::string _encodedDataKey);
 
 	bool locked;
-	Encrypter userEncrypter;
+	RSAEncrypter userEncrypter;
 	std::string encryptedUserPrivateKey;
 	std::string dataKey;
 	std::string encryptedDataKey;
@@ -80,7 +80,7 @@ class Data {
 
    private:
 	bool locked;
-	Encrypter dataEncrypter;
+	RSAEncrypter dataEncrypter;
 	std::string data;
 	std::string encryptedData;
 };

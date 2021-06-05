@@ -17,7 +17,7 @@ jobs:
       - name: Build
         run: make build
 
-      - name: Test Encrypter
+      - name: Test RSAEncrypter
         run: make run_test_encrypter
         working-directory: ./tests
 
