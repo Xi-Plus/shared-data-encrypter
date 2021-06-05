@@ -14,8 +14,8 @@ int main() {
 	SDE::DataAccess alice_apple = SDE::DataAccess(alice_pass);
 	apple.giveAccessTo(alice_apple);
 
-	// apple.encryptData();
-	// alice_apple.encryptDataKey();
+	apple.encryptData();
+	alice_apple.encryptDataKey();
 
 	// Create data banana
 	SDE::Data banana = SDE::Data(banana_str);
@@ -28,7 +28,7 @@ int main() {
 	SDE::DataAccess bob_banana = SDE::DataAccess(bob_pass);
 	banana.giveAccessTo(bob_banana);
 
-	// banana.encryptData();
-	// alice_banana.encryptDataKey();
-	// bob_banana.encryptDataKey();
+	banana.encryptData();
+	alice_banana.encryptDataKey();
+	bob_banana.encryptDataKey();
 }

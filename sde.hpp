@@ -57,21 +57,26 @@ class DataAccess {
 	std::string getEncryptedDataKey();
 
    private:
+	std::string getDataKey();
+	void setDataKey(std::string _encodedDataKey);
+
 	bool locked;
 	Encrypter userEncrypter;
 	std::string encryptedUserPrivateKey;
 	std::string dataKey;
 	std::string encryptedDataKey;
+
+	friend class Data;
 };
 
 class Data {
    public:
 	Data(std::string _data);
-	Data(CryptoPP::RSA::PublicKey _publicKey, std::string _encryptedData);
+	Data(std::string _encodePublicKey, std::string _encryptedData);
 
 	void encryptData();
-	void decryptData(DataAccess access);
-	void giveAccessTo(DataAccess access);
+	void decryptData(DataAccess& access);
+	void giveAccessTo(DataAccess& access);
 
    private:
 	bool locked;

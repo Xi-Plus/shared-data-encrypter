@@ -10,6 +10,8 @@
 #include <cryptopp/pwdbased.h>
 #include <cryptopp/rsa.h>
 
+#include <exception>
+
 /* Encrypter */
 SDE::Encrypter::Encrypter() {
 	CryptoPP::InvertibleRSAFunction params;
@@ -203,17 +205,45 @@ std::string SDE::DataAccess::getEncryptedDataKey() {
 	return encryptedDataKey;
 }
 
+std::string SDE::DataAccess::getDataKey() {
+	return dataKey;
+}
+
+void SDE::DataAccess::setDataKey(std::string _encodedDataKey) {
+	dataKey = _encodedDataKey;
+}
+
 /* Data */
 SDE::Data::Data(std::string _data) {
 	locked = false;
+	data = _data;
+	encryptedData = "";
 };
 
-SDE::Data::Data(CryptoPP::RSA::PublicKey _publicKey, std::string _encryptedData) {
+SDE::Data::Data(std::string _encodePublicKey, std::string _encryptedData) {
+	dataEncrypter.setEncodedPublicKey(_encodePublicKey);
+
 	locked = true;
-	// publicKey = _publicKey;
+	data = "";
 	encryptedData = _encryptedData;
 };
 
-void SDE::Data::giveAccessTo(DataAccess access){
+void SDE::Data::encryptData() {
+	encryptedData = dataEncrypter.encryptString(data);
+	data = "";
+	locked = true;
+}
 
+void SDE::Data::decryptData(DataAccess& access) {
+	dataEncrypter.setEncodedPrivateKey(access.getDataKey());
+	data = dataEncrypter.decryptString(encryptedData);
+	locked = false;
+}
+
+void SDE::Data::giveAccessTo(DataAccess& access) {
+	if (locked) {
+		throw std::runtime_error("Data is locked");
+	}
+
+	access.setDataKey(dataEncrypter.getEncodedPrivateKey());
 };
