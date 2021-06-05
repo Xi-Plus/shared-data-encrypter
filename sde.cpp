@@ -147,6 +147,13 @@ std::string SDE::PasswordEncrypter::decryptString(std::string encrypted) {
 	return decrypted;
 }
 
+std::string SDE::PasswordEncrypter::GeneratePassword() {
+	CryptoPP::AutoSeededRandomPool prng;
+	unsigned char password[32];
+	prng.GenerateBlock(password, 32);
+	return std::string((const char*)password);
+}
+
 /* DataAccess */
 SDE::DataAccess::DataAccess(std::string password) {
 	SDE::PasswordEncrypter userPrivateKeyEncrypter = SDE::PasswordEncrypter(password);

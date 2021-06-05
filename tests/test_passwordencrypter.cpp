@@ -21,4 +21,7 @@ int main() {
 	std::string decrypted = encrypter2.decryptString(encrypted);
 	std::cout << "decrypted: " << decrypted << std::endl;
 	assert(plainText == decrypted);
+
+	std::cout << "generated password: " << std::endl;
+	std::cout << SDE::PasswordEncrypter::GeneratePassword() << std::endl;
 }

@@ -40,6 +40,8 @@ class PasswordEncrypter {
 	std::string encryptString(std::string plainText);
 	std::string decryptString(std::string encrypted);
 
+	static std::string GeneratePassword();
+
    private:
 	CryptoPP::SecByteBlock key;
 };
