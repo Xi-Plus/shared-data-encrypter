@@ -175,12 +175,9 @@ SDE::DataAccess::DataAccess(std::string _encodedUserPublicKey, std::string _encr
 }
 
 void SDE::DataAccess::encryptDataKey() {
-	std::cout << "C\n";
 	encryptedDataKey = userEncrypter.encryptString(dataKey);
-	std::cout << "D\n";
 	dataKey = "";
 	locked = true;
-	std::cout << "D\n";
 }
 
 void SDE::DataAccess::decryptDataKey(std::string password) {
@@ -224,29 +221,36 @@ void SDE::DataAccess::setDataKey(std::string _encodedDataKey) {
 }
 
 /* Data */
-SDE::Data::Data(std::string _data) {
-	locked = false;
-	data = _data;
-	encryptedData = "";
+SDE::Data SDE::Data::newFromPlain(std::string _data) {
+	SDE::Data data = SDE::Data();
+	data.locked = false;
+	data.dataKey = SDE::PasswordEncrypter::GeneratePassword();
+	data.dataEncrypter = new SDE::PasswordEncrypter(data.dataKey);
+	data.data = _data;
+	data.encryptedData = "";
+	return data;
 };
 
-SDE::Data::Data(std::string _encodePublicKey, std::string _encryptedData) {
-	dataEncrypter.setEncodedPublicKey(_encodePublicKey);
-
-	locked = true;
-	data = "";
-	encryptedData = _encryptedData;
+SDE::Data SDE::Data::newFromEncrypted(std::string _encryptedData) {
+	SDE::Data data = SDE::Data();
+	data.locked = true;
+	data.dataKey = "";
+	data.data = "";
+	data.encryptedData = _encryptedData;
+	return data;
 };
 
 void SDE::Data::encryptData() {
-	encryptedData = dataEncrypter.encryptString(data);
+	if (!locked) {
+		encryptedData = dataEncrypter->encryptString(data);
+	}
 	data = "";
 	locked = true;
 }
 
 void SDE::Data::decryptData(DataAccess& access) {
-	dataEncrypter.setEncodedPrivateKey(access.getDataKey());
-	data = dataEncrypter.decryptString(encryptedData);
+	dataEncrypter = new SDE::PasswordEncrypter(access.getDataKey());
+	data = dataEncrypter->decryptString(encryptedData);
 	locked = false;
 }
 
@@ -255,5 +259,5 @@ void SDE::Data::giveAccessTo(DataAccess& access) {
 		throw std::runtime_error("Data is locked");
 	}
 
-	access.setDataKey(dataEncrypter.getEncodedPrivateKey());
+	access.setDataKey(dataKey);
 };

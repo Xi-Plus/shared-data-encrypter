@@ -73,16 +73,19 @@ class DataAccess {
 
 class Data {
    public:
-	Data(std::string _data);
-	Data(std::string _encodePublicKey, std::string _encryptedData);
+	static Data newFromPlain(std::string _data);
+	static Data newFromEncrypted(std::string _encryptedData);
 
 	void encryptData();
 	void decryptData(DataAccess& access);
 	void giveAccessTo(DataAccess& access);
 
    private:
+	Data() = default;
+
 	bool locked;
-	RSAEncrypter dataEncrypter;
+	PasswordEncrypter* dataEncrypter = nullptr;
+	std::string dataKey;
 	std::string data;
 	std::string encryptedData;
 };

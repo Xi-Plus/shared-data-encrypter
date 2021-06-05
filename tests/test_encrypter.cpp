@@ -6,7 +6,7 @@
 #include "sde.hpp"
 
 int main() {
-	SDE::Encrypter encrypter = SDE::Encrypter();
+	SDE::RSAEncrypter encrypter = SDE::RSAEncrypter();
 
 	std::cout << "public: " << std::endl;
 	std::cout << encrypter.getEncodedPublicKey() << std::endl;
@@ -20,7 +20,7 @@ int main() {
 	std::string encrypted = encrypter.encryptString(plainText);
 	std::cout << "encrypted: " << encrypted << std::endl;
 
-	SDE::Encrypter encrypter2 = SDE::Encrypter();
+	SDE::RSAEncrypter encrypter2 = SDE::RSAEncrypter();
 
 	std::string faildecrypted = encrypter2.decryptString(encrypted);
 	std::cout << "fail decrypted: " << faildecrypted << std::endl;
