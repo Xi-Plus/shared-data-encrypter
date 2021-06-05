@@ -1,8 +1,77 @@
 #include "sde.hpp"
 
-SDE::DataAccess::DataAccess(){
+#include <cryptopp/cryptlib.h>
+#include <cryptopp/hex.h>
+#include <cryptopp/osrng.h>
+#include <cryptopp/rsa.h>
 
+SDE::Encrypter::Encrypter() {
+	CryptoPP::InvertibleRSAFunction params;
+	params.GenerateRandomWithKeySize(*rng, 2048);
+
+	privateKey = new CryptoPP::RSA::PrivateKey(params);
+	publicKey = new CryptoPP::RSA::PublicKey(params);
 };
+
+CryptoPP::RSA::PublicKey SDE::Encrypter::getPublicKey() {
+	return *(this->publicKey);
+}
+
+std::string SDE::Encrypter::getEncodedPublicKey() {
+	return EncodeKey<CryptoPP::RSA::PublicKey>(getPublicKey());
+}
+
+CryptoPP::RSA::PrivateKey SDE::Encrypter::getPrivateKey() {
+	return *(this->privateKey);
+}
+std::string SDE::Encrypter::getEncodedPrivateKey() {
+	return EncodeKey<CryptoPP::RSA::PrivateKey>(getPrivateKey());
+}
+
+void SDE::Encrypter::setEncodedPublicKey(std::string encodedKey) {
+	*(this->publicKey) = decodeKey<CryptoPP::RSA::PublicKey>(encodedKey);
+}
+
+void SDE::Encrypter::setEncodedPrivateKey(std::string encodedKey) {
+	*(this->privateKey) = decodeKey<CryptoPP::RSA::PrivateKey>(encodedKey);
+}
+
+std::string SDE::Encrypter::encryptString(std::string plainText) {
+	std::string encrypted;
+
+	CryptoPP::RSAES_OAEP_SHA_Encryptor e(*publicKey);
+	CryptoPP::StringSource(
+		plainText, true,
+		new CryptoPP::PK_EncryptorFilter(
+			*rng,
+			e,
+			new CryptoPP::StringSink(encrypted)));
+
+	return encrypted;
+}
+
+std::string SDE::Encrypter::decryptString(std::string encrypted) {
+	std::string decrypted;
+
+	CryptoPP::RSAES_OAEP_SHA_Decryptor d(*privateKey);
+
+	try {
+		CryptoPP::StringSource(
+			encrypted, true,
+			new CryptoPP::PK_DecryptorFilter(
+				*rng, d,
+				new CryptoPP::StringSink(decrypted)));
+
+	} catch (const CryptoPP::InvalidCiphertext& e) {
+		std::cerr << e.what() << '\n';
+		return "";
+	}
+
+	return decrypted;
+}
+
+SDE::DataAccess::DataAccess(std::string password) {}
+SDE::DataAccess::DataAccess(CryptoPP::RSA::PublicKey _publicKey, std::string _encryptedPrivateKey, std::string _encryptedDataKey) {}
 
 void SDE::DataAccess::encryptDataKey() {
 }
