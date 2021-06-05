@@ -68,7 +68,7 @@ std::string SDE::Encrypter::decryptString(std::string encrypted) {
 				*rng, d,
 				new CryptoPP::StringSink(decrypted)));
 
-	} catch (const CryptoPP::InvalidCiphertext& e) {
+	} catch (const CryptoPP::Exception& e) {
 		std::cerr << e.what() << '\n';
 		return "";
 	}
