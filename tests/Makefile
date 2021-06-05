@@ -1,4 +1,6 @@
-test: run_test_encrypter run_test_passwordencrypter run_test_dataaccess run_test_basic
+SDE=../sde$(shell python3-config --extension-suffix)
+
+test: run_test_encrypter run_test_passwordencrypter run_test_dataaccess run_test_basic pytest_basic
 
 test_encrypter: test_encrypter.cpp ../sde.o
 	g++ -std=c++14 -o test_encrypter ../sde.o test_encrypter.cpp -I ../ -l:libcryptopp.a
@@ -23,3 +25,6 @@ test_basic: test_basic.cpp ../sde.o
 
 run_test_basic: test_basic
 	./test_basic
+
+pytest_basic: $(SDE)
+	python3 test_basic.py

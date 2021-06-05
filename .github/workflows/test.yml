@@ -32,3 +32,7 @@ jobs:
       - name: Basic tests
         run: make run_test_basic
         working-directory: ./tests
+
+      - name: Python tests
+        run: make pytest_basic
+        working-directory: ./tests
