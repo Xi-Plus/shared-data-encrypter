@@ -33,6 +33,17 @@ class Encrypter {
 	CryptoPP::RSA::PublicKey* publicKey = nullptr;
 };
 
+class PasswordEncrypter {
+   public:
+	PasswordEncrypter(std::string password);
+
+	std::string encryptString(std::string plainText);
+	std::string decryptString(std::string encrypted);
+
+   private:
+	CryptoPP::SecByteBlock key;
+};
+
 class DataAccess {
    public:
 	DataAccess(std::string password);
@@ -46,8 +57,8 @@ class DataAccess {
 	std::string getEncryptedDataKey();
 
    private:
-	CryptoPP::RSA::PublicKey publicKey;
-	CryptoPP::RSA::PrivateKey privateKey;
+	bool locked;
+	Encrypter dataKeyEncrypter;
 	std::string dataKey;
 	std::string encryptedDataKey;
 };
@@ -63,7 +74,7 @@ class Data {
 
    private:
 	bool locked;
-	CryptoPP::RSA::PublicKey publicKey;
+	Encrypter dataEncrypter;
 	std::string data;
 	std::string encryptedData;
 };

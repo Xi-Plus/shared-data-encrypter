@@ -17,6 +17,14 @@ jobs:
       - name: Build
         run: make build
 
-      - name: Run tests
-        run: make test
+      - name: Test Encrypter
+        run: make run_test_encrypter
+        working-directory: ./tests
+
+      - name: Test PasswordEncrypter
+        run: make run_test_passwordencrypter
+        working-directory: ./tests
+
+      - name: Basic tests
+        run: make run_test_basic
         working-directory: ./tests
