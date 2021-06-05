@@ -146,13 +146,37 @@ std::string SDE::PasswordEncrypter::decryptString(std::string encrypted) {
 }
 
 /* DataAccess */
-SDE::DataAccess::DataAccess(std::string password) {}
-SDE::DataAccess::DataAccess(CryptoPP::RSA::PublicKey _publicKey, std::string _encryptedPrivateKey, std::string _encryptedDataKey) {}
+SDE::DataAccess::DataAccess(std::string password) {
+	SDE::PasswordEncrypter passEncrypter = SDE::PasswordEncrypter(password);
+
+	locked = false;
+	dataKeyEncrypter = SDE::Encrypter();
+	encryptedPrivateKey = passEncrypter.encryptString(dataKeyEncrypter.getEncodedPrivateKey());
+	dataKey = "";
+	encryptedDataKey = "";
+}
+
+SDE::DataAccess::DataAccess(std::string _encodedPublicKey, std::string _encryptedPrivateKey, std::string _encryptedDataKey) {
+	locked = true;
+	dataKeyEncrypter = SDE::Encrypter();
+	dataKeyEncrypter.setEncodedPublicKey(_encodedPublicKey);
+	encryptedPrivateKey = _encryptedPrivateKey;
+	dataKey = "";
+	encryptedDataKey = _encryptedDataKey;
+}
 
 void SDE::DataAccess::encryptDataKey() {
+	encryptedDataKey = dataKeyEncrypter.encryptString(dataKey);
+	dataKey = "";
+	locked = true;
 }
 
 void SDE::DataAccess::decryptDataKey(std::string password) {
+	SDE::PasswordEncrypter passEncrypter = SDE::PasswordEncrypter(password);
+	dataKeyEncrypter.setEncodedPrivateKey(passEncrypter.decryptString(encryptedPrivateKey));
+
+	dataKey = dataKeyEncrypter.decryptString(encryptedDataKey);
+	locked = false;
 }
 
 void SDE::DataAccess::changePassword(std::string oldPassword, std::string newPassword) {
@@ -162,6 +186,7 @@ std::string SDE::DataAccess::getEncryptedDataKey() {
 	return encryptedDataKey;
 }
 
+/* Data */
 SDE::Data::Data(std::string _data) {
 	locked = false;
 };

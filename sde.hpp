@@ -47,7 +47,7 @@ class PasswordEncrypter {
 class DataAccess {
    public:
 	DataAccess(std::string password);
-	DataAccess(CryptoPP::RSA::PublicKey _publicKey, std::string _encryptedPrivateKey, std::string _encryptedDataKey);
+	DataAccess(std::string _encodedPublicKey, std::string _encryptedPrivateKey, std::string _encryptedDataKey);
 
 	void encryptDataKey();
 	void decryptDataKey(std::string password);
@@ -59,6 +59,7 @@ class DataAccess {
    private:
 	bool locked;
 	Encrypter dataKeyEncrypter;
+	std::string encryptedPrivateKey;
 	std::string dataKey;
 	std::string encryptedDataKey;
 };
