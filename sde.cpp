@@ -222,22 +222,22 @@ void SDE::DataAccess::setDataKey(std::string _encodedDataKey) {
 
 /* Data */
 SDE::Data SDE::Data::newFromPlain(std::string _data) {
-	SDE::Data data = SDE::Data();
-	data.locked = false;
-	data.dataKey = SDE::AESEncrypter::GeneratePassword();
-	data.dataEncrypter = new SDE::AESEncrypter(data.dataKey);
-	data.data = _data;
-	data.encryptedData = "";
-	return data;
+	SDE::Data newData = SDE::Data();
+	newData.locked = false;
+	newData.dataKey = SDE::AESEncrypter::GeneratePassword();
+	newData.dataEncrypter = new SDE::AESEncrypter(newData.dataKey);
+	newData.data = _data;
+	newData.encryptedData = newData.dataEncrypter->encryptString(newData.data);
+	return newData;
 };
 
 SDE::Data SDE::Data::newFromEncrypted(std::string _encryptedData) {
-	SDE::Data data = SDE::Data();
-	data.locked = true;
-	data.dataKey = "";
-	data.data = "";
-	data.encryptedData = _encryptedData;
-	return data;
+	SDE::Data newData = SDE::Data();
+	newData.locked = true;
+	newData.dataKey = "";
+	newData.data = "";
+	newData.encryptedData = _encryptedData;
+	return newData;
 };
 
 void SDE::Data::encryptData() {
@@ -261,3 +261,15 @@ void SDE::Data::giveAccessTo(DataAccess& access) {
 
 	access.setDataKey(dataKey);
 };
+
+std::string SDE::Data::getData() {
+	if (locked) {
+		throw std::runtime_error("Data is locked");
+	}
+
+	return data;
+}
+
+std::string SDE::Data::getEncryptedData() {
+	return encryptedData;
+}

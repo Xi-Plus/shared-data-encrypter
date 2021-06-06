@@ -52,5 +52,11 @@ PYBIND11_MODULE(sde, m) {
 		.def_static("newFromEncrypted", &SDE::Data::newFromEncrypted)
 		.def("encryptData", &SDE::Data::encryptData)
 		.def("decryptData", &SDE::Data::decryptData)
-		.def("giveAccessTo", &SDE::Data::giveAccessTo);
+		.def("giveAccessTo", &SDE::Data::giveAccessTo)
+		.def("getData", [](SDE::Data &data) {
+			return pybind11::bytes(data.getData());
+		})
+		.def("getEncryptedData", [](SDE::Data &data) {
+			return pybind11::bytes(data.getEncryptedData());
+		});
 }

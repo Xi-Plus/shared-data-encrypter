@@ -79,6 +79,8 @@ class Data {
 	void encryptData();
 	void decryptData(DataAccess& access);
 	void giveAccessTo(DataAccess& access);
+	std::string getData();
+	std::string getEncryptedData();
 
    private:
 	Data() = default;
