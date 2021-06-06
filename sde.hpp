@@ -8,6 +8,9 @@
 
 namespace SDE {
 
+/**
+ * Core class to encrypt/decrypt strings by <a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)">RSA</a>.
+ */
 class RSAEncrypter {
    public:
 	RSAEncrypter();
@@ -33,6 +36,9 @@ class RSAEncrypter {
 	CryptoPP::RSA::PublicKey* publicKey = nullptr;
 };
 
+/**
+ * Core class to encrypt/decrypt strings by <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>.
+ */
 class AESEncrypter {
    public:
 	AESEncrypter(std::string password);
