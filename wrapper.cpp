@@ -43,9 +43,15 @@ PYBIND11_MODULE(sde, m) {
 		.def("encryptDataKey", &SDE::DataAccess::encryptDataKey)
 		.def("decryptDataKey", &SDE::DataAccess::decryptDataKey)
 		.def("changePassword", &SDE::DataAccess::changePassword)
-		.def("getUserPublicKey", &SDE::DataAccess::getUserPublicKey)
-		.def("getEncryptedUserPrivateKey", &SDE::DataAccess::getEncryptedUserPrivateKey)
-		.def("getEncryptedDataKey", &SDE::DataAccess::getEncryptedDataKey);
+		.def("getUserPublicKey", [](SDE::DataAccess &da) {
+			return pybind11::bytes(da.getUserPublicKey());
+		})
+		.def("getEncryptedUserPrivateKey", [](SDE::DataAccess &da) {
+			return pybind11::bytes(da.getEncryptedUserPrivateKey());
+		})
+		.def("getEncryptedDataKey", [](SDE::DataAccess &da) {
+			return pybind11::bytes(da.getEncryptedDataKey());
+		});
 
 	pybind11::class_<SDE::Data>(m, "Data")
 		.def_static("newFromPlain", &SDE::Data::newFromPlain)
