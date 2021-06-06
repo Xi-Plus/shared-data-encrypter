@@ -72,7 +72,7 @@ std::string SDE::RSAEncrypter::decryptString(std::string encrypted) {
 
 	} catch (const CryptoPP::Exception& e) {
 		std::cerr << e.what() << '\n';
-		return "";
+		throw e;
 	}
 
 	return decrypted;

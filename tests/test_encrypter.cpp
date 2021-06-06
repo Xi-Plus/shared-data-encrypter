@@ -22,9 +22,11 @@ int main() {
 
 	SDE::RSAEncrypter encrypter2 = SDE::RSAEncrypter();
 
-	std::string faildecrypted = encrypter2.decryptString(encrypted);
-	std::cout << "fail decrypted: " << faildecrypted << std::endl;
-	assert(plainText != faildecrypted);
+	try {
+		std::string faildecrypted = encrypter2.decryptString(encrypted);
+	} catch (const CryptoPP::Exception& e) {
+		std::cout << "fail decrypted" << std::endl;
+	}
 
 	encrypter2.setEncodedPrivateKey(encrypter.getEncodedPrivateKey());
 
