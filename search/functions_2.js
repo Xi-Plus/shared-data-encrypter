@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['getencodedprivatekey_19',['getEncodedPrivateKey',['../classSDE_1_1RSAEncrypter.html#af23189b3c6e0f8c378d95c109020d7b4',1,'SDE::RSAEncrypter']]],
-  ['getencodedpublickey_20',['getEncodedPublicKey',['../classSDE_1_1RSAEncrypter.html#a7fde330a5d8d3d0a2b109c74d1bf38d5',1,'SDE::RSAEncrypter']]],
-  ['getprivatekey_21',['getPrivateKey',['../classSDE_1_1RSAEncrypter.html#aabe0f3f6bae7f9a65c4796ff8f0316aa',1,'SDE::RSAEncrypter']]],
-  ['getpublickey_22',['getPublicKey',['../classSDE_1_1RSAEncrypter.html#a158c25fe9c06936f6e63730cdda8d089',1,'SDE::RSAEncrypter']]]
+  ['dataaccess_33',['DataAccess',['../classSDE_1_1DataAccess.html#aa54429deb63a897fe75f1b1f80361ae5',1,'SDE::DataAccess::DataAccess(std::string password)'],['../classSDE_1_1DataAccess.html#a0eab1bcba5a7d8d4bbeddf10c1805eb5',1,'SDE::DataAccess::DataAccess(std::string _encodedUserPublicKey, std::string _encryptedUserPrivateKey, std::string _encryptedDataKey)']]],
+  ['decryptdata_34',['decryptData',['../classSDE_1_1Data.html#a7a4e922d5e3adea36c6a648eaec041a7',1,'SDE::Data']]],
+  ['decryptdatakey_35',['decryptDataKey',['../classSDE_1_1DataAccess.html#a6312d5b5639d7c7f21a4d8e98a1bba2a',1,'SDE::DataAccess']]],
+  ['decryptstring_36',['decryptString',['../classSDE_1_1RSAEncrypter.html#ace3b828b61d07b9d9327c09013f40a91',1,'SDE::RSAEncrypter::decryptString()'],['../classSDE_1_1AESEncrypter.html#a1dbdc4d182caede125266402d1bf666b',1,'SDE::AESEncrypter::decryptString()']]]
 ];
