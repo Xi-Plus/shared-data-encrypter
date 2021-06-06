@@ -151,7 +151,7 @@ std::string SDE::AESEncrypter::GeneratePassword() {
 	CryptoPP::AutoSeededRandomPool prng;
 	unsigned char password[32];
 	prng.GenerateBlock(password, 32);
-	return std::string((const char*)password);
+	return std::string((const char*)password, 32);
 }
 
 /* DataAccess */
