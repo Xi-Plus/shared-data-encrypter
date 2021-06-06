@@ -60,6 +60,7 @@ class RSAEncrypter {
 	 * Decrypt a string.
 	 *
 	 * @param encrypted Encrypted text to be decrypted.
+	 * @exception CryptoPP::Exception The decryption is failed.
 	 */
 	std::string decryptString(std::string encrypted);
 
