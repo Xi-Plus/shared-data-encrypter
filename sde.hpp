@@ -33,9 +33,9 @@ class RSAEncrypter {
 	CryptoPP::RSA::PublicKey* publicKey = nullptr;
 };
 
-class PasswordEncrypter {
+class AESEncrypter {
    public:
-	PasswordEncrypter(std::string password);
+	AESEncrypter(std::string password);
 
 	std::string encryptString(std::string plainText);
 	std::string decryptString(std::string encrypted);
@@ -84,7 +84,7 @@ class Data {
 	Data() = default;
 
 	bool locked;
-	PasswordEncrypter* dataEncrypter = nullptr;
+	AESEncrypter* dataEncrypter = nullptr;
 	std::string dataKey;
 	std::string data;
 	std::string encryptedData;

@@ -105,9 +105,9 @@ const Key SDE::RSAEncrypter::decodeKey(std::string& encodedKey) {
 	return key;
 }
 
-/* PasswordEncrypter */
+/* AESEncrypter */
 // https://stackoverflow.com/a/27348134/13509181
-SDE::PasswordEncrypter::PasswordEncrypter(std::string password) {
+SDE::AESEncrypter::AESEncrypter(std::string password) {
 	unsigned int iterations = 15000;
 	char purpose = 0;
 
@@ -117,7 +117,7 @@ SDE::PasswordEncrypter::PasswordEncrypter(std::string password) {
 	kdf.DeriveKey(key.data(), key.size(), purpose, (byte*)password.data(), password.size(), NULL, 0, iterations);
 }
 
-std::string SDE::PasswordEncrypter::encryptString(std::string plainText) {
+std::string SDE::AESEncrypter::encryptString(std::string plainText) {
 	std::string encrypted;
 
 	CryptoPP::CTR_Mode<CryptoPP::AES>::Encryption encryption;
@@ -132,7 +132,7 @@ std::string SDE::PasswordEncrypter::encryptString(std::string plainText) {
 	return encrypted;
 }
 
-std::string SDE::PasswordEncrypter::decryptString(std::string encrypted) {
+std::string SDE::AESEncrypter::decryptString(std::string encrypted) {
 	std::string decrypted;
 
 	CryptoPP::CTR_Mode<CryptoPP::AES>::Decryption decryption;
@@ -147,7 +147,7 @@ std::string SDE::PasswordEncrypter::decryptString(std::string encrypted) {
 	return decrypted;
 }
 
-std::string SDE::PasswordEncrypter::GeneratePassword() {
+std::string SDE::AESEncrypter::GeneratePassword() {
 	CryptoPP::AutoSeededRandomPool prng;
 	unsigned char password[32];
 	prng.GenerateBlock(password, 32);
@@ -156,7 +156,7 @@ std::string SDE::PasswordEncrypter::GeneratePassword() {
 
 /* DataAccess */
 SDE::DataAccess::DataAccess(std::string password) {
-	SDE::PasswordEncrypter userPrivateKeyEncrypter = SDE::PasswordEncrypter(password);
+	SDE::AESEncrypter userPrivateKeyEncrypter = SDE::AESEncrypter(password);
 
 	locked = false;
 	userEncrypter = SDE::RSAEncrypter();
@@ -181,7 +181,7 @@ void SDE::DataAccess::encryptDataKey() {
 }
 
 void SDE::DataAccess::decryptDataKey(std::string password) {
-	SDE::PasswordEncrypter userPrivateKeyEncrypter = SDE::PasswordEncrypter(password);
+	SDE::AESEncrypter userPrivateKeyEncrypter = SDE::AESEncrypter(password);
 	userEncrypter.setEncodedPrivateKey(userPrivateKeyEncrypter.decryptString(encryptedUserPrivateKey));
 
 	dataKey = userEncrypter.decryptString(encryptedDataKey);
@@ -192,7 +192,7 @@ void SDE::DataAccess::changePassword(std::string oldPassword, std::string newPas
 	bool oldLocked = locked;
 	decryptDataKey(oldPassword);
 
-	SDE::PasswordEncrypter userPrivateKeyEncrypter = SDE::PasswordEncrypter(newPassword);
+	SDE::AESEncrypter userPrivateKeyEncrypter = SDE::AESEncrypter(newPassword);
 	encryptedUserPrivateKey = userPrivateKeyEncrypter.encryptString(userEncrypter.getEncodedPrivateKey());
 
 	if (oldLocked) {
@@ -224,8 +224,8 @@ void SDE::DataAccess::setDataKey(std::string _encodedDataKey) {
 SDE::Data SDE::Data::newFromPlain(std::string _data) {
 	SDE::Data data = SDE::Data();
 	data.locked = false;
-	data.dataKey = SDE::PasswordEncrypter::GeneratePassword();
-	data.dataEncrypter = new SDE::PasswordEncrypter(data.dataKey);
+	data.dataKey = SDE::AESEncrypter::GeneratePassword();
+	data.dataEncrypter = new SDE::AESEncrypter(data.dataKey);
 	data.data = _data;
 	data.encryptedData = "";
 	return data;
@@ -249,7 +249,7 @@ void SDE::Data::encryptData() {
 }
 
 void SDE::Data::decryptData(DataAccess& access) {
-	dataEncrypter = new SDE::PasswordEncrypter(access.getDataKey());
+	dataEncrypter = new SDE::AESEncrypter(access.getDataKey());
 	data = dataEncrypter->decryptString(encryptedData);
 	locked = false;
 }

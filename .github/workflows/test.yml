@@ -23,7 +23,7 @@ jobs:
         run: make run_test_encrypter
         working-directory: ./tests
 
-      - name: Test PasswordEncrypter
+      - name: Test AESEncrypter
         run: make run_test_passwordencrypter
         working-directory: ./tests
 
