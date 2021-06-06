@@ -8,5 +8,10 @@ int main() {
 	SDE::AESEncrypter passEncrypter = SDE::AESEncrypter(ALICE_PASS);
 	SDE::DataAccess alice = SDE::DataAccess(ALICE_PASS);
 
-	assert(alice.getEncryptedDataKey() == "");	// EncryptedDataKey must be empty at first
+	try {
+		alice.getEncryptedDataKey();
+		assert(false);
+	} catch (const std::exception& e) {
+		std::cerr << e.what() << '\n';
+	}
 }
