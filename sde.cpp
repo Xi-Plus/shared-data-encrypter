@@ -209,6 +209,10 @@ std::string SDE::DataAccess::getEncryptedUserPrivateKey() {
 }
 
 std::string SDE::DataAccess::getEncryptedDataKey() {
+	if (encryptedDataKey == "") {
+		throw std::runtime_error("This DataAccess has not been assigned to any Data. Use Data::giveAccessTo to assign it.");
+	}
+
 	return encryptedDataKey;
 }
 
@@ -218,6 +222,7 @@ std::string SDE::DataAccess::getDataKey() {
 
 void SDE::DataAccess::setDataKey(std::string _encodedDataKey) {
 	dataKey = _encodedDataKey;
+	encryptedDataKey = userEncrypter.encryptString(dataKey);
 }
 
 /* Data */
