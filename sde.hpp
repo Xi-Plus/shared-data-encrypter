@@ -37,21 +37,29 @@ class RSAEncrypter {
 
 	/**
 	 * Set base64-encoded public key for this encrypter.
+	 *
+	 * @param encodedKey Base64-encoded public key
 	 */
 	void setEncodedPublicKey(std::string encodedKey);
 
 	/**
 	 * Set base64-encoded private key for this encrypter.
+	 *
+	 * @param encodedKey Base64-encoded private key
 	 */
 	void setEncodedPrivateKey(std::string encodedKey);
 
 	/**
 	 * Encrypt a string.
+	 *
+	 * @param plainText Plain text to be encrypted.
 	 */
 	std::string encryptString(std::string plainText);
 
 	/**
 	 * Decrypt a string.
+	 *
+	 * @param encrypted Encrypted text to be decrypted.
 	 */
 	std::string decryptString(std::string encrypted);
 
