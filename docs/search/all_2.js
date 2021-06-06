@@ -1,4 +1,8 @@
 var searchData=
 [
-  ['encryptstring_4',['encryptString',['../classSDE_1_1RSAEncrypter.html#a7d6858ad26a039c29c252b315ed510d9',1,'SDE::RSAEncrypter']]]
+  ['data_2',['Data',['../classSDE_1_1Data.html',1,'SDE']]],
+  ['dataaccess_3',['DataAccess',['../classSDE_1_1DataAccess.html#aa54429deb63a897fe75f1b1f80361ae5',1,'SDE::DataAccess::DataAccess(std::string password)'],['../classSDE_1_1DataAccess.html#a0eab1bcba5a7d8d4bbeddf10c1805eb5',1,'SDE::DataAccess::DataAccess(std::string _encodedUserPublicKey, std::string _encryptedUserPrivateKey, std::string _encryptedDataKey)'],['../classSDE_1_1DataAccess.html',1,'SDE::DataAccess']]],
+  ['decryptdata_4',['decryptData',['../classSDE_1_1Data.html#a7a4e922d5e3adea36c6a648eaec041a7',1,'SDE::Data']]],
+  ['decryptdatakey_5',['decryptDataKey',['../classSDE_1_1DataAccess.html#a6312d5b5639d7c7f21a4d8e98a1bba2a',1,'SDE::DataAccess']]],
+  ['decryptstring_6',['decryptString',['../classSDE_1_1RSAEncrypter.html#ace3b828b61d07b9d9327c09013f40a91',1,'SDE::RSAEncrypter::decryptString()'],['../classSDE_1_1AESEncrypter.html#a1dbdc4d182caede125266402d1bf666b',1,'SDE::AESEncrypter::decryptString()']]]
 ];
