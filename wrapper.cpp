@@ -8,6 +8,35 @@ PYBIND11_MODULE(sde, m) {
 	m.doc() = "shared-data-encrypter";
 
 	// Ref: https://pybind11.readthedocs.io/en/stable/classes.html
+	pybind11::class_<SDE::RSAEncrypter>(m, "RSAEncrypter")
+		.def(pybind11::init<>())
+		.def("getEncodedPublicKey", [](SDE::RSAEncrypter &rsa) {
+			return pybind11::bytes(rsa.getEncodedPublicKey());
+		})
+		.def("getEncodedPrivateKey", [](SDE::RSAEncrypter &rsa) {
+			return pybind11::bytes(rsa.getEncodedPrivateKey());
+		})
+		.def("setEncodedPublicKey", &SDE::RSAEncrypter::setEncodedPublicKey)
+		.def("setEncodedPrivateKey", &SDE::RSAEncrypter::setEncodedPrivateKey)
+		.def("encryptString", [](SDE::RSAEncrypter &rsa, const std::string &text) {
+			return pybind11::bytes(rsa.encryptString(text));
+		})
+		.def("decryptString", [](SDE::RSAEncrypter &rsa, const std::string &text) {
+			return pybind11::bytes(rsa.decryptString(text));
+		});
+
+	pybind11::class_<SDE::AESEncrypter>(m, "AESEncrypter")
+		.def(pybind11::init<const std::string &>())
+		.def("encryptString", [](SDE::AESEncrypter &aes, const std::string &text) {
+			return pybind11::bytes(aes.encryptString(text));
+		})
+		.def("decryptString", [](SDE::AESEncrypter &aes, const std::string &text) {
+			return pybind11::bytes(aes.decryptString(text));
+		})
+		.def_static("GeneratePassword", []() {
+			return pybind11::bytes(SDE::AESEncrypter::GeneratePassword());
+		});
+
 	pybind11::class_<SDE::DataAccess>(m, "DataAccess")
 		.def(pybind11::init<const std::string &>())
 		.def(pybind11::init<const std::string &, const std::string &, const std::string &>())
@@ -19,8 +48,8 @@ PYBIND11_MODULE(sde, m) {
 		.def("getEncryptedDataKey", &SDE::DataAccess::getEncryptedDataKey);
 
 	pybind11::class_<SDE::Data>(m, "Data")
-		.def("newFromPlain", &SDE::Data::newFromPlain)
-		.def("newFromEncrypted", &SDE::Data::newFromEncrypted)
+		.def_static("newFromPlain", &SDE::Data::newFromPlain)
+		.def_static("newFromEncrypted", &SDE::Data::newFromEncrypted)
 		.def("encryptData", &SDE::Data::encryptData)
 		.def("decryptData", &SDE::Data::decryptData)
 		.def("giveAccessTo", &SDE::Data::giveAccessTo);
