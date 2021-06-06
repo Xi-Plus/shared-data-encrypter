@@ -15,13 +15,44 @@ class RSAEncrypter {
    public:
 	RSAEncrypter();
 
+	/**
+	 * Get raw public key for this encrypter.
+	 */
 	CryptoPP::RSA::PublicKey getPublicKey();
+
+	/**
+	 * Get raw private key for this encrypter.
+	 */
 	CryptoPP::RSA::PrivateKey getPrivateKey();
+
+	/**
+	 * Get base64-encoded public key for this encrypter.
+	 */
 	std::string getEncodedPublicKey();
+
+	/**
+	 * Get base64-encoded private key for this encrypter.
+	 */
 	std::string getEncodedPrivateKey();
+
+	/**
+	 * Set base64-encoded public key for this encrypter.
+	 */
 	void setEncodedPublicKey(std::string encodedKey);
+
+	/**
+	 * Set base64-encoded private key for this encrypter.
+	 */
 	void setEncodedPrivateKey(std::string encodedKey);
+
+	/**
+	 * Encrypt a string.
+	 */
 	std::string encryptString(std::string plainText);
+
+	/**
+	 * Decrypt a string.
+	 */
 	std::string decryptString(std::string encrypted);
 
    private:
@@ -52,6 +83,9 @@ class AESEncrypter {
 	CryptoPP::SecByteBlock key;
 };
 
+/**
+ * Store access information to Data.
+ */
 class DataAccess {
    public:
 	DataAccess(std::string password);
@@ -77,6 +111,9 @@ class DataAccess {
 	friend class Data;
 };
 
+/**
+ * Store secret string and their keys.
+ */
 class Data {
    public:
 	static Data newFromPlain(std::string _data);
